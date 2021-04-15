@@ -138,6 +138,123 @@ FROM instructor
 WHERE name like '%st%';
 -- #ESCAPE #예약어 #\   =>   "100%" 는 '100 \%' 으로
 
+-- Ordering the Display of Tuples
+--p.3.24
+-- List in alphabetic order the names of all instructors 
+
+SELECT distinct name
+FROM instructor
+order by name ASC;
+
+-- Where Clause Predicates
+-- p.3.25 
+-- Find the names of all instructors with salary between $90,000 and $100,000
+--  (that is, >= $90,000 and <= $100,000)
+
+SELECT NAME
+FROM instructor
+WHERE salary BETWEEN 90000 and 100000;
+
+/* 이거 실행 안됨 ㅗㅗㅗ
+select I.name, T.course_idUN
+from instructor I, teaches T
+where (I.ID, dept_name) = (T.ID, 'Biology');
+*/
+
+-- p.3.26
+-- Find courses that ran in Fall 2017 but not in Spring 2018
+
+SELECT COURSE_ID
+FROM section
+WHERE SEMESTER = 'Fall' and year = '2009'
+MINUS
+SELECT COURSE_ID
+FROM section
+WHERE SEMESTER = 'SPRING' and year = '2018';
+
+-- Aggregate Functions #집합 #여러개에 적용되는
+/*
+avg: average value	
+min:  minimum value	
+max:  maximum value	
+sum:  sum of values	
+count:  number of values
+*/
+-- p.3.31
+-- Find the average salary of instructors in the Computer Science department #평균
+
+SELECT AVG(salary)
+FROM instructor
+where dept_name = 'Comp. Sci.';
+
+-- Find the total number of instructors who teach a course in the Spring 2018 semester
+-- 09년도로 바꿈
+SELECT COUNT(DISTINCT ID)
+FROM teaches
+WHERE semester = 'Spring' and  year = '2009';
+
+-- p.3.32
+-- Find the average salary of instructors in each department
+
+SELECT dept_name , AVG(salary)
+FROM instructor
+Group by dept_name;
+
+--p.3.34
+
+--Find the names and average salaries of all departments whose average salary is greater than 42000
+
+SELECT dept_name, AVG(salary)
+FROM instructor
+GROUP BY dept_name
+HAVING AVG(salary)>42000;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
