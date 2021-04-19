@@ -540,11 +540,39 @@ insert into  course
 values('CS-001','Weekly Seminar', null,'0' );
 
 -- 12.b.
+-- Create a section of this course in Fall 2017, with sec id of 1, and with the location of this section not yet specified
+insert into section 
+values('CS-001', '1', 'Fall','2017',null,null,null);
 
+-- 12.c.
+-- Enroll every student in the Comp. Sci. department in the above section.
 
+insert into Takes(id,course_id,sec_id, semester, year)
+select id,'CS-001', '1', 'Fall','2017'
+from student where dept_name = 'Comp. Sci.';
 
+select S.id, S.name, S.dept_name, T.course_id
+from takes T ,STUDENT S
+where S.id = T.id and 
+S.dept_name = 'Comp. Sci.'
+ORDER BY course_id ;
 
+-- 12.d.
+-- Delete enrollments in the above section where the student’s ID is 12345.
+Delete from takes
+where course_id = 'CS-001' and id = '12345';
 
+-- 12.f.
+/*
+Delete all takes tuples corresponding to any section of any course with
+the word “advanced” as a part of the title; ignore case when matching the
+word with the title.
+*/
 
-
-
+DELETE FROM takes
+WHERE course_id = (
+    SELECT C.course_id
+    from course C
+    where LOWER(title)
+    like '%advanced%'
+);
