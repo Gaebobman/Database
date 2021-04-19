@@ -432,22 +432,114 @@ select *
 from takes join student on student.id= takes.id;
 -- 중복삭제 X
 
--- 실행안됨 (중복 컬럼이름들 바꿔주면 됨)
-select *
-from takes, student
-where takes.id = student.id;
--- 같은거
-
-
 select *
 from takes natural join student;
 -- 중복삭제 O
 
+-- 과제 쿼리문
+
+-- 1.a.
+-- Find the titles of courses in the Comp. Sci. department that have 3 credits.
+SELECT title
+FROM COURSE
+WHERE dept_name = 'Comp. Sci.' and credits = '3';
+
+-- 1.b.
+-- Find the IDs of all students who were taught by an instructor named Einstein make sure there are no duplicates in the result.
+-- 강사이름 주고 수강한 학생들 
+
+SELECT id
+FROM takes
+where course_id = (SELECT course_id
+FROM teaches natural join instructor
+where name = 'Einstein');
+--  또는
+
+SELECT distinct(id)
+FROM takes
+WHERE course_id = (
+    SELECT course_id
+    FROM TEACHES 
+    where id =(
+        Select id
+        From instructor
+        WHERE name = 'Einstein'
+    )
+);
+
+-- 1.c.
+-- Find the highest salary of any instructor. 최고 연봉 금액 돈 
+SELECT max(salary)
+FROM instructor;
+
+-- 1.d.
+-- Find all instructors earning the highest salary (there may be more than one with the same salary).
+SELECT Name
+FROM instructor
+where salary = (SELECT max(salary)
+                FROM instructor);
+
+-- 1.e.
+-- Find the enrollment of each section that was offered in Fall 2009.
+
+-- 둘다 됨.
+SELECT course_id, count(distinct(id)) 
+FROM Section NATURAL JOIN Takes 
+WHERE year= '2009' and semester = 'Fall'
+GROUP BY course_id;
+
+-- 이게 맞는듯
+SELECT S.course_id, count(S.course_id)
+FROM Section S, Takes T
+WHERE S.course_id = T.course_id AND
+S.year= '2009' and S.semester = 'Fall'
+GROUP BY S.course_id;
+
+-- 1.f.
+-- Find the maximum enrollment, across all sections, in Fall 2009
+
+with sec_enroll as (
+    SELECT S.course_id, count(S.course_id) as enroll_num
+    FROM Section S, Takes T
+    WHERE S.course_id = T.course_id 
+    AND S.sec_id = T.sec_id
+    AND S.semester = T.semester
+    AND S.year= '2009' and S.semester = 'Fall'
+    GROUP BY S.course_id)
+Select course_id, enroll_num
+FROM sec_enroll
+where enroll_num = (select max(enroll_num) from sec_enroll); 
+
+-- 3.a.
+-- Increase the salary of each instructor in the Comp. Sci. department by 10%
+update instructor
+set salary = salary * 1.1
+where dept_name = 'Comp. Sci.'; 
+
+-- 3.b. 
+-- Delete all courses that have never been offered (i.e., do not occur in the section relation).
+delete from course
+where course_id not in
+(select course_id from section); 
+
+-- 3.c. 
+-- Insert every student whose tot cred attribute is greater than 100 as an instructor in the same department, with a salary of $10,000.
+-- Check 제약조건 (돈 29,000$보다 커야해서 임의로 바꿈)
+insert into instructor
+select id, name, dept_name, 100000
+from student
+where tot_cred > '100';
+
+-- 12.a.
+-- Create a new course “CS-001”, titled “Weekly Seminar”, with 0 credits.
 
 
+alter table course disable constraint SYS_C0022912;
+-- 학점이 0보다 커야하는 check constraint 체크 제약조건 disable 했다.
+insert into  course
+values('CS-001','Weekly Seminar', null,'0' );
 
-
-
+-- 12.b.
 
 
 
