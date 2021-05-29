@@ -68,6 +68,7 @@ WHERE Semester = 'Spring' and year = '2010';
 -- p.3.14
 -- Find the department names of all instructors, and remove duplicates
 -- The keyword all specifies that duplicates should not be removed
+
 SELECT distinct dept_name
 FROM instructor;
 SELECT all dept_name
