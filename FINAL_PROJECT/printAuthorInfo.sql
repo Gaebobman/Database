@@ -8,12 +8,17 @@ x_author_name varchar(100);
 x_title varchar(100);
 x_ISBN varchar(13);
 x_publisher_ID varchar(12);
+x_author_number numeric(1);
 
 x_publisher_name varchar(40);
 
 x_publication_date date;
 
 t_nowAuthor_ID varchar(6) :='';
+t_oneAuthor varchar(8) := '0';
+t_twoAuthor varchar(8) := '0';
+t_threeAuthor varchar(8) := '0';
+
 CURSOR authorCursor is
     SELECT ID, name
     FROM author;
@@ -24,7 +29,7 @@ CURSOR authorWritesCursor is
     WHERE author_ID = x_author_ID;
 
 CURSOR bookCursor is
-    SELECT title, publisher_ID, publication_date
+    SELECT title, publisher_ID, publication_date, author_number
     FROM book
     WHERE ISBN = x_ISBN;
 
@@ -59,9 +64,21 @@ BEGIN
             
             OPEN bookCursor;
             LOOP
-                FETCH bookCursor INTO x_title, x_publisher_ID, x_publication_date;
+                FETCH bookCursor INTO x_title, x_publisher_ID, x_publication_date, x_author_number;
                 EXIT WHEN bookCursor%NOTFOUND;
                 dbms_output.put_line('          '||'제목: '||x_title);
+
+                IF(x_author_number = 1) then
+                t_oneAuthor := t_oneAuthor +1;
+                END IF;
+
+                IF(x_author_number = 2) then
+                t_oneAuthor := t_twoAuthor +1;
+                END IF;
+
+                IF(x_author_number = 3) then
+                t_oneAuthor := t_threeAuthor +1;
+                END IF;
 
                 OPEN publisherNameCursor;
                 LOOP
@@ -84,11 +101,18 @@ BEGIN
 
             END LOOP;
             CLOSE bookCursor;
-
+            
         END LOOP;
         CLOSE authorWritesCursor;
-        
+        dbms_output.put_line('       '||'총 출판 권수');
+            dbms_output.put_line('          '||'단독: '||t_oneAuthor||'권');
+            dbms_output.put_line('          '||'2인 공저: '||t_twoAuthor||'권');
+            dbms_output.put_line('          '||'3인 공저: '||t_threeAuthor||'권');
+            dbms_output.new_line;
     t_nowAuthor_ID :='';
+    t_oneAuthor :='0';
+    t_twoAuthor :='0';
+    t_threeAuthor :='0';
     END LOOP;
     CLOSE authorCursor;
 END;
