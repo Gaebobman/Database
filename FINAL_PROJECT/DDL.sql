@@ -39,10 +39,18 @@ create table book
 
 create table author
     (ID     varchar(6),
-     name   varchar(10),
+     name   varchar(100),
      primary key(ID)
     );
 
+create table customer
+    (ID     varchar(8),
+     name   varchar(30),
+     point  numeric(3) check(point >= 0),
+     address    varchar(100),
+     tel    varchar(11),
+     primary key(ID)
+    );
 create table purchase_record
     (customer_ID    varchar(12),
      book_ISBN      varchar(13),
@@ -74,11 +82,3 @@ create table writes(
         on delete set null
 );
 
-create table customer
-    (ID     varchar(8),
-     name   varchar(30),
-     point  numeric(3) check(point >= 0),
-     address    varchar(100),
-     tel    varchar(11),
-     primary key(ID)
-    );
