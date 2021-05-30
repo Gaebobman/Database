@@ -1,0 +1,16 @@
+INSERT INTO THEME values('0100', '철학');
+INSERT INTO THEME values('0200', '종교');
+INSERT INTO THEME values('0300', '사회과학');
+INSERT INTO THEME values('0400', '자연과학');
+INSERT INTO THEME values('0500', '기술과학');
+INSERT INTO THEME values('0600', '예술');
+INSERT INTO THEME values('0700', '언어');
+
+철학 0100 - 종교 0200, 언어 0700 
+종교 0200 - 철학 0100 , 예술 0600
+사회과학 0300 - 언어 0700
+자연과학 0400- 기술과학 0500
+기술과학 0500- 자연과학 0400
+예술 0600- 종교 0200
+언어 0700- 철학 0100, 사회과학 0300
+

@@ -47,6 +47,8 @@ create table purchase_record
     (customer_ID    varchar(12),
      book_ISBN      varchar(13),
      primary key (customer_ID, book_ISBN),
+     foreign key (customer_ID) references customer(ID)
+        on delete set null,
      foreign key (book_ISBN) references book(ISBN)
         on delete set null
     );
@@ -74,7 +76,7 @@ create table writes(
 
 create table customer
     (ID     varchar(8),
-     name   varchar(10),
+     name   varchar(30),
      point  numeric(3) check(point >= 0),
      address    varchar(100),
      tel    varchar(11),
