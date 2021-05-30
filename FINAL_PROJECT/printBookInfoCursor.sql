@@ -89,7 +89,8 @@ BEGIN
         dbms_output.put_line('      '||'페이지: '||x_pages||' | '||x_price||'원 |'||' 출판사: '||x_publisher_name);
         dbms_output.new_line;
         -- 페이지 수, 가격, 출판사, 날짜, 주제 출력 그리고 줄바꾸기
-
+        dbms_output.put_line('      '||'##### 서평 #####');
+        dbms_output.new_line;
         -- 서평 구역
         OPEN reviewCursor;
         LOOP   
