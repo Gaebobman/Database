@@ -28,6 +28,7 @@ x_customer_ID varchar(12);
 t_numOfReview varchar(8) := '0';
 t_valOfRate numeric(8, 1) := '0';
 t_bookRate  numeric(8, 1) := '0';
+t_ISBN varchar(13);
 -- 책 테이블에서 ISBN, 제목, 저자ID, 페이지수, 가격, 출판사ID, 출판일, 주제ID를 가져온다.
 CURSOR bookCursor is
     SELECT ISBN, title, pages, price, publisher_ID, publication_date, theme_ID
@@ -58,6 +59,12 @@ CURSOR reviewCursor is
     FROM book_review
     WHERE book_ISBN = x_ISBN;
 
+--책 정보를 읽어올 때마다 평점을 업데이트 한다.
+CURSOR updateRateCursor is
+    SELECT ISBN
+    FROM book
+    WHERE ISBN =x_ISBN
+    FOR UPDATE;
 BEGIN
     OPEN bookCursor;
     LOOP
@@ -105,6 +112,16 @@ BEGIN
         dbms_output.new_line;
         dbms_output.put_line('            '||'평점: '|| t_bookRate);
         --평점출력
+        OPEN updateRateCursor;
+        LOOP   
+            FETCH updateRateCursor INTO t_ISBN;
+            EXIT WHEN updateRateCursor%NOTFOUND;
+
+            UPDATE book
+                SET rate =t_bookRate
+                WHERE CURRENT OF updateRateCursor;
+        END LOOP;
+        CLOSE updateRateCursor;
         -- 서평구역 끝
 
         --사용변수 초기화

@@ -30,6 +30,7 @@ create table book
      price  numeric(7),
      author_number  numeric(1),
      publication_date   date,
+     rate numeric(8, 1),
      primary key (ISBN),
      foreign key (publisher_ID) references publisher(ID)
         on delete set null,
