@@ -4,6 +4,6 @@ CREATE OR REPLACE TRIGGER customer_point_plus
     FOR EACH ROW
 BEGIN 
     UPDATE customer
-    SET point = point + 10
+    SET point = point + 1
     WHERE customer.ID = :NEW.customer_ID;
 END customer_point_plus;

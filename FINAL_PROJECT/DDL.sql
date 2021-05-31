@@ -52,6 +52,7 @@ create table customer
      tel    varchar(11),
      primary key(ID)
     );
+    
 create table purchase_record
     (customer_ID    varchar(12),
      book_ISBN      varchar(13),
